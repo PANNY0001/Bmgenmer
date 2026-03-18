@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMgen | High-Performance Helmets</title>
+    
+    <!-- Bootstrap 5.3 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    
+    <style>
+        /* CRITICAL UI CONFIGURATION */
+        :root {
+            --carbon: #1a1a1b;
+            --orange: #ff5722;
+            --dark-gray: #121212;
+            --white: #ffffff;
+        }
+
+        * { box-sizing: border-box; }
+
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: var(--carbon);
+            color: var(--white);
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            overflow: hidden; /* Requirement: No Scroll on Body */
+        }
+
+        /* HIDDEN RADIOS FOR TABS */
+        .tab-input { display: none; }
+
+        /* LAYOUT STRUCTURE */
+        .viewport {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            width: 100%;
+        }
+
+        /* NAVIGATION BAR */
+        nav {
+            background: var(--dark-gray);
+            border-bottom: 2px solid var(--orange);
+            display: flex;
+            justify-content: center;
+            padding: 0;
+            z-index: 1000;
+            flex-shrink: 0;
+        }
+
+        .nav-btn {
+            padding: 15px 20px;
+            cursor: pointer;
+            font-weight: 800;
+            text-transform: uppercase;
+            color: #666;
+            transition: all 0.2s ease;
+            font-size: 0.85rem;
+            letter-spacing: 1px;
+        }
+
+        .nav-btn:hover { color: var(--orange); }
+
+        /* PAGE SWITCHING LOGIC */
+        .content-container {
+            flex-grow: 1;
+            position: relative;
+            background: radial-gradient(circle at center, #2c2c2e 0%, #1a1a1b 100%);
+        }
+
+        section {
+            position: absolute;
+            inset: 0;
+            padding: 40px 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: scale(0.98);
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            overflow-y: auto; /* Allows scrolling inside the section only */
+            -webkit-overflow-scrolling: touch;
+        }
+
+        /* Radio Logic: If ID is checked, show the corresponding section */
+        #home:checked ~ .viewport nav label[for="home"],
+        #safety:checked ~ .viewport nav label[for="safety"],
+        #catalog:checked ~ .viewport nav label[for="catalog"],
+        #reviews:checked ~ .viewport nav label[for="reviews"],
+        #contact:checked ~ .viewport nav label[for="contact"] {
+            color: var(--orange);
+            background: rgba(255, 87, 34, 0.1);
+            border-bottom: 3px solid var(--orange);
+        }
+
+        #home:checked ~ .viewport #sec-home,
+        #safety:checked ~ .viewport #sec-safety,
+        #catalog:checked ~ .viewport #sec-catalog,
+        #reviews:checked ~ .viewport #sec-reviews,
+        #contact:checked ~ .viewport #sec-contact {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+            z-index: 10;
+        }
+
+        /* UI COMPONENTS */
+        .hero-box {
+            max-width: 900px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        .accent-text { color: var(--orange); font-weight: bold; }
+        
+        .product-card {
+            background: #252526;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 15px;
+            transition: 0.3s;
+            height: 100%;
+        }
+
+        .product-card:hover { border-color: var(--orange); }
+
+   .img-placeholder {
+    width: 100%;
+    height: auto;            /* This prevents the "squishing" */
+    max-height: 5000px;       /* Limits the size so it doesn't get too huge */
+    object-fit: contain;     /* This ensures the whole helmet is visible without cropping */
+    border-radius: 8px;
+    background: transparent; /* Changed from #333 to show the full image clearly */
+}
+
+        .btn-bmgen {
+            background: var(--orange);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            font-weight: bold;
+            text-transform: uppercase;
+            border-radius: 0;
+        }
+
+        .badge-cert {
+            border: 1px solid var(--orange);
+            color: var(--orange);
+            padding: 2px 8px;
+            font-size: 0.7rem;
+            margin-right: 5px;
+        }
+
+        /* Scrollbar Styling */
+        section::-webkit-scrollbar { width: 6px; }
+        section::-webkit-scrollbar-thumb { background: var(--orange); }
+img {
+  border-radius: 50%;
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Tab Control Inputs -->
+    <input type="radio" name="nav" id="home" class="tab-input" checked>
+    <input type="radio" name="nav" id="safety" class="tab-input">
+    <input type="radio" name="nav" id="catalog" class="tab-input">
+    <input type="radio" name="nav" id="reviews" class="tab-input">
+    <input type="radio" name="nav" id="contact" class="tab-input">
+
+    <div class="viewport">
+        <!-- Navigation -->
+        <nav>
+            <label for="home" class="nav-btn">Home</label>
+            <label for="safety" class="nav-btn">Safety</label>
+            <label for="catalog" class="nav-btn">Catalog</label>
+            <label for="reviews" class="nav-btn">Reviews</label>
+            <label for="contact" class="nav-btn">Contact</label>
+        </nav>
+
+        <!-- Main Content Area -->
+        <div class="content-container">
+            
+            <!-- HOME -->
+            <section id="sec-home">
+                <div class="hero-box">
+                    <h1 class="display-3 fw-bold mt-4">BM<span class="accent-text">GEN</span></h1>
+                    <p class="lead">ENGINEERED FOR THE PHILIPPINE RIDER.</p>
+                    <img src="https://images.unsplash.com/photo-1558981806-ec527fa84c39?w=800&q=80" class="img-fluid rounded mb-4" alt="Hero Helmet" style="max-height: 500spx;">
+                    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
+                        <label for="catalog" class="btn btn-bmgen btn-lg px-5">View Collection</label>
+                    </div>
+                </div>
+            </section>
+
+            <!-- SAFETY -->
+            <section id="sec-safety">
+                <div class="container">
+                    <h2 class="accent-text mb-4">SAFETY SPECIFICATIONS</h2>
+                    <div class="row align-items-center">
+                        <div class="col-md-6">
+                            <p class="fs-5">Our helmets undergo rigorous testing to survive the harshest Philippine road conditions.</p>
+                            <ul class="list-group list-group-flush bg-transparent">
+                                <li class="list-group-item bg-transparent text-white border-secondary">✔ <strong>ICC Certified:</strong> Local safety compliant.</li>
+                                <li class="list-group-item bg-transparent text-white border-secondary">✔ <strong>ECE 22.06:</strong> Global impact standards.</li>
+                                <li class="list-group-item bg-transparent text-white border-secondary">✔ <strong>Carbon-Fiber Shell:</strong> Ultra-lightweight 1300g.</li>
+                            </ul>
+                        </div>
+                       <div class="col-md-6 mt-4 mt-md-0 text-center">
+    <img src="shopping.jpg" class="img-fluid rounded shadow" alt="Safety Tech" onerror="this.src='https://images.unsplash.com/photo-1627610069351-93c683b5df5b?w=800'">
+</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CATALOG -->
+            <section id="sec-catalog">
+                <div class="container">
+                    <h2 class="text-center mb-5 fw-bold">CHOOSE YOUR <span class="accent-text">ARMOR</span></h2>
+                    <div class="row g-4">
+                        <!-- Product 1 -->
+                        <div class="col-md-4">
+                            <div class="product-card text-center">
+                                <img src="ducate.jpg" class="img-placeholder" alt="Full Face" onerror="this.src='https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=400'">
+                                <h5>Ducati Logo Full-Face Helmet</h5>
+                                <p class="accent-text">₱6,200.00</p>
+                                <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modal1">QUICK VIEW</button>
+                            </div>
+                        </div>
+                        <!-- Product 2 -->
+                        <div class="col-md-4">
+                            <div class="product-card text-center">
+                                <img src="fullfaec.jpg" class="img-placeholder" alt="Modular" onerror="this.src='https://images.unsplash.com/photo-1544383173-01826500445d?w=400'">
+                                <h5>Biltwell Gringo S</h5>
+                                <p class="accent-text">₱5,450.00</p>
+                                <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modal1">QUICK VIEW</button>
+                            </div>
+                        </div>
+                        <!-- Product 3 -->
+                        <div class="col-md-4">
+                            <div class="product-card text-center">
+                                <img src="evo1.jpg" class="img-placeholder" alt="Open Face" onerror="this.src='https://images.unsplash.com/photo-1618355245554-20353c7a38b5?w=400'">
+                                <h5>EVO RX-7</h5>
+                                <p class="accent-text">₱4,500.00</p>
+                                <button class="btn btn-outline-light w-100" data-bs-toggle="modal" data-bs-target="#modal1">QUICK VIEW</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- REVIEWS -->
+            <section id="sec-reviews">
+                <div class="container text-center">
+                    <h2 class="accent-text mb-5">RIDER VOICES</h2>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <div class="p-4 border border-secondary rounded">
+                                <p class="fst-italic">"Best ventilation for the heat in EDSA. Highly recommended!"</p>
+                                <p class="fw-bold mb-0">- Mark T., Manila</p>
+				<img src="nesh.jpg" alt="wow" width="50" height="80">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 border border-secondary rounded">
+                                <p class="fst-italic">"Saved me during a slide in Marilaque. BMgen is legit."</p>
+                                <p class="fw-bold mb-0">- Jay-R, Rizal</p>
+				<img src="wwo.jpg" alt="wow" width="50" height="80">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CONTACT -->
+            <section id="sec-contact">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h2 class="accent-text">JOIN THE PACK</h2>
+                            <p>Visit our flagship store in Quezon City.</p>
+                            <p><strong>Hotline:</strong> 0924-567-5531</p>
+                            <p><strong>Email:</strong> ride@bmgen.ph</p>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="p-4 bg-dark rounded">
+                                <input type="text" class="form-control mb-3 bg-secondary text-white border-0" placeholder="Full Name">
+                                <input type="email" class="form-control mb-3 bg-secondary text-white border-0" placeholder="Email">
+                                <button class="btn btn-bmgen w-100">Subscribe for Drops</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- BOOTSTRAP MODAL -->
+    <div class="modal fade" id="modal1" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content bg-dark border-orange">
+                <div class="modal-header border-secondary">
+			<img src="bmgen.png" alt="bm" width="50" height="30">
+                    <h5 class="modal-title text-white">Technical Specs</h5>
+				
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-white">
+                    <div class="mb-2"><span class="badge-cert">ECE 22.06</span> <span class="badge-cert">ICC</span></div>
+                    <ul>
+                        <li>Material: TRICARBOCO</li>
+                        <li>Weight: 1,400 grams</li>
+                        <li>Padding: Hypoallergenic / Washable</li>
+                        <li>Lock: Double-D Ring</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
